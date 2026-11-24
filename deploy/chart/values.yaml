@@ -1,0 +1,22 @@
+# Install: helm upgrade --install workspace . -n workspace --create-namespace
+# Prerequisites on london:
+#   secret ghcr-pull     (docker-registry, read access to the image)
+#   secret workspace-secrets with LLM_API_KEY (freellmapi unified key; may be empty for free models)
+
+image:
+  repository: ghcr.io/owner/llm-node   # overridden by the workflow
+  tag: "latest"
+
+host: ""   # set by the workflow from the WORKSPACE_HOST repository variable
+port: 4096
+storage: 30Gi
+storageClass: local-path
+secretName: workspace-secrets
+pullSecretName: ghcr-pull
+
+# Default model for the chat. opencode's built-in free models need no key.
+defaultModel: opencode/beam-free
+
+resources:
+  requests: { memory: 1Gi, cpu: 250m }
+  limits:   { memory: 6Gi }

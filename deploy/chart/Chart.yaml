@@ -1,0 +1,6 @@
+apiVersion: v2
+name: workspace
+description: Coding workspace (opencode server), tailnet-only
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

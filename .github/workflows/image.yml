@@ -24,3 +24,32 @@ jobs:
           docker build -f Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
+
+  deploy:
+    needs: build-image
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Join tailnet (ephemeral, tag:ci)
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Deploy to cluster
+        env:
+          KUBECONFIG_CI: ${{ secrets.KUBECONFIG_CI }}
+        run: |
+          printf '%s' "$KUBECONFIG_CI" > "$RUNNER_TEMP/kubeconfig"
+          export KUBECONFIG="$RUNNER_TEMP/kubeconfig"
+          helm upgrade --install workspace deploy/chart -n workspace \
+            --set image.repository="ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}" \
+            --set image.tag="${{ github.sha }}" \
+            --set host="${{ vars.WORKSPACE_HOST }}" \
+            --wait --timeout 10m
+          rm -f "$RUNNER_TEMP/kubeconfig"
