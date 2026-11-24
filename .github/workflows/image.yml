@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and push
         run: |
-          IMAGE="ghcr.io/${{ github.repository_owner }}/dev-workspace"
+          IMAGE="ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
           docker build -f Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"

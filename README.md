@@ -1,4 +1,4 @@
-# dev-workspace
+# llm-node
 
 Container image for a coding workspace: an opencode server with Ghidra,
 Lightpanda, Playwright/Chromium, Python (uv) and Node tooling.
