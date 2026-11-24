@@ -49,7 +49,12 @@ RUN curl -fsSL -o /usr/local/bin/lightpanda \
     && chmod 755 /usr/local/bin/lightpanda
 
 # anyfetch: web search and fetch (MCP server for opencode), checksum-verified.
-RUN curl -fsSL -o /tmp/anyfetch.tar.xz \n      "https://github.com/aliasmode/anyfetch/releases/download/v${ANYFETCH_VERSION}/anyfetch-aarch64-unknown-linux-gnu.tar.xz" \n    && echo "${ANYFETCH_SHA256}  /tmp/anyfetch.tar.xz" | sha256sum -c - \n    && mkdir -p /tmp/anyfetch && tar -xJf /tmp/anyfetch.tar.xz -C /tmp/anyfetch \n    && install -m 755 "$(find /tmp/anyfetch -name anyfetch -type f | head -1)" /usr/local/bin/anyfetch \n    && rm -rf /tmp/anyfetch /tmp/anyfetch.tar.xz
+RUN curl -fsSL -o /tmp/anyfetch.tar.xz \
+      "https://github.com/aliasmode/anyfetch/releases/download/v${ANYFETCH_VERSION}/anyfetch-aarch64-unknown-linux-gnu.tar.xz" \
+    && echo "${ANYFETCH_SHA256}  /tmp/anyfetch.tar.xz" | sha256sum -c - \
+    && mkdir -p /tmp/anyfetch && tar -xJf /tmp/anyfetch.tar.xz -C /tmp/anyfetch \
+    && install -m 755 "$(find /tmp/anyfetch -name anyfetch -type f | head -1)" /usr/local/bin/anyfetch \
+    && rm -rf /tmp/anyfetch /tmp/anyfetch.tar.xz
 
 # Python tooling and Playwright with Chromium (system deps included).
 RUN python3 -m pip install --break-system-packages --no-cache-dir playwright uv \
