@@ -25,7 +25,7 @@ spec:
             - containerPort: {{ .Values.port }}
           env:
             - name: OPENCODE_CONFIG_CONTENT
-              value: '{"model":"{{ .Values.defaultModel }}"}'
+              value: '{"model":"{{ .Values.defaultModel }}","mcp":{"anyfetch":{"type":"local","command":["anyfetch","mcp"],"enabled":true}}}'
             - name: LLM_API_KEY
               valueFrom:
                 secretKeyRef: { name: {{ .Values.secretName }}, key: LLM_API_KEY }

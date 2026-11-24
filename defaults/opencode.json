@@ -13,9 +13,21 @@
         "apiKey": "{env:LLM_API_KEY}"
       },
       "models": {
-        "auto": { "name": "auto" }
+        "auto": {
+          "name": "auto"
+        }
       }
     }
   },
-  "model": "freellmapi/auto"
+  "model": "freellmapi/auto",
+  "mcp": {
+    "anyfetch": {
+      "type": "local",
+      "command": [
+        "anyfetch",
+        "mcp"
+      ],
+      "enabled": true
+    }
+  }
 }

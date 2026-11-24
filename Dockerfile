@@ -10,6 +10,8 @@ ARG GHIDRA_SHA256=2c2cd776db3c1f6a097ba418922378ac3649cadd5e844a6f5f088ae628a7be
 ARG OPENCODE_VERSION=1.19.6
 ARG LIGHTPANDA_VERSION=1.0.5
 ARG LIGHTPANDA_SHA256=7527391c479f323eb9111b834b012d91a89057528c28ef027741b21739b12299
+ARG ANYFETCH_VERSION=0.8.4
+ARG ANYFETCH_SHA256=4e056f3b71de21689a90bdb2da4515b653e95ccd5f29971db002c40754e86473
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
@@ -45,6 +47,9 @@ RUN curl -fsSL -o /usr/local/bin/lightpanda \
       "https://github.com/lightpanda-io/browser/releases/download/${LIGHTPANDA_VERSION}/lightpanda-aarch64-linux" \
     && echo "${LIGHTPANDA_SHA256}  /usr/local/bin/lightpanda" | sha256sum -c - \
     && chmod 755 /usr/local/bin/lightpanda
+
+# anyfetch: web search and fetch (MCP server for opencode), checksum-verified.
+RUN curl -fsSL -o /tmp/anyfetch.tar.xz \n      "https://github.com/aliasmode/anyfetch/releases/download/v${ANYFETCH_VERSION}/anyfetch-aarch64-unknown-linux-gnu.tar.xz" \n    && echo "${ANYFETCH_SHA256}  /tmp/anyfetch.tar.xz" | sha256sum -c - \n    && mkdir -p /tmp/anyfetch && tar -xJf /tmp/anyfetch.tar.xz -C /tmp/anyfetch \n    && install -m 755 "$(find /tmp/anyfetch -name anyfetch -type f | head -1)" /usr/local/bin/anyfetch \n    && rm -rf /tmp/anyfetch /tmp/anyfetch.tar.xz
 
 # Python tooling and Playwright with Chromium (system deps included).
 RUN python3 -m pip install --break-system-packages --no-cache-dir playwright uv \
